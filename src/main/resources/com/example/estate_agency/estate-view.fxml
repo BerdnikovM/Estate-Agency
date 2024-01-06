@@ -21,7 +21,7 @@
             </image>
         </ImageView>
 
-        <VBox alignment="CENTER" spacing="10" layoutX="215" layoutY="110">
+        <VBox fx:id="registrContainer" alignment="CENTER" spacing="10" layoutX="215" layoutY="110">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10"/>
             </padding>

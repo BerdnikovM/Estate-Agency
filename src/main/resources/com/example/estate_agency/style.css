@@ -1,5 +1,5 @@
 /* Стили для VBox */
-VBox {
+#registrContainer {
     -fx-background-color: white; /* Установка белого фона */
     -fx-padding: 20px; /* Отступы для VBox */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); /* Тень */
@@ -28,3 +28,5 @@ Button {
     -fx-padding: 5px 10px; /* Отступы внутри кнопки */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
 }
+
+
