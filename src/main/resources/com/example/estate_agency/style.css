@@ -1,0 +1,30 @@
+/* Стили для VBox */
+VBox {
+    -fx-background-color: white; /* Установка белого фона */
+    -fx-padding: 20px; /* Отступы для VBox */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); /* Тень */
+    -fx-border-radius: 5px; /* Закругление углов */
+}
+
+/* Стили для текстовых полей (TextField) */
+TextField {
+    -fx-background-color: white; /* Установка белого фона */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
+    -fx-border-radius: 5px; /* Закругление углов */
+}
+
+/* Стили для полей ввода пароля (PasswordField) */
+PasswordField {
+    -fx-background-color: white; /* Установка белого фона */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
+    -fx-border-radius: 5px; /* Закругление углов */
+}
+
+/* Стили для кнопок */
+Button {
+    -fx-background-color: #4CAF50; /* Установка цвета кнопок */
+    -fx-text-fill: white; /* Цвет текста на кнопке */
+    -fx-border-radius: 5px; /* Закругление углов */
+    -fx-padding: 5px 10px; /* Отступы внутри кнопки */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
+}

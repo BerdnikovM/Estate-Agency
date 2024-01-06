@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            stylesheets="@style.css"
+            xmlns:fx="[1](http://javafx.com/fxml/1)"
+            xmlns="[2](http://javafx.com/javafx/8.0.171)"
+            fx:controller="com.example.estate_agency.EstateController">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="600.0">
+            <image>
+                <Image url="@images/cozy-house-signin.jpg"/>
+            </image>
+        </ImageView>
+
+        <VBox alignment="CENTER" spacing="10" layoutX="215" layoutY="110">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </padding>
+
+            <TextField fx:id="nameField"
+                       promptText="Имя"/>
+
+            <TextField fx:id="emailField"
+                       promptText="Почта"/>
+
+            <PasswordField fx:id="passwordField"
+                           promptText="Пароль"/>
+
+            <Button text="Зарегистрироваться" onAction="#registerAction"/>
+
+            <Button text="У меня есть аккаунт" onAction="#loginAction"/>
+        </VBox>
+    </children>
+</AnchorPane>
