@@ -35,9 +35,23 @@
             <PasswordField fx:id="passwordField"
                            promptText="Пароль"/>
 
-            <Button text="Зарегистрироваться" onAction="#registerAction"/>
+            <Button fx:id="RegistrBtn" text="Зарегистрироваться" onAction="#registerAction"/>
 
-            <Button text="У меня есть аккаунт" onAction="#loginAction"/>
+            <Button fx:id="showLoginFormButton" text="У меня есть аккаунт" onAction="#showLoginForm"/>
         </VBox>
+
+        <VBox fx:id="loginContainer" alignment="CENTER" spacing="10" layoutX="215" layoutY="110" visible="false">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10"/>
+            </padding>
+
+            <TextField fx:id="emailFieldLogin" promptText="Почта"/>
+
+            <PasswordField fx:id="passwordFieldLogin" promptText="Пароль"/>
+
+            <Button fx:id="loginBtn" text="Войти"/>
+            <Button fx:id="showRegisterFormButton" text="У меня нету аккаунта" onAction="#showRegisterForm"/>
+        </VBox>
+
     </children>
 </AnchorPane>

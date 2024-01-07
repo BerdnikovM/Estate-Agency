@@ -1,5 +1,5 @@
 /* Стили для VBox */
-#registrContainer {
+#registrContainer, #loginContainer {
     -fx-background-color: white; /* Установка белого фона */
     -fx-padding: 20px; /* Отступы для VBox */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); /* Тень */
@@ -7,21 +7,14 @@
 }
 
 /* Стили для текстовых полей (TextField) */
-TextField {
-    -fx-background-color: white; /* Установка белого фона */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
-    -fx-border-radius: 5px; /* Закругление углов */
-}
-
-/* Стили для полей ввода пароля (PasswordField) */
-PasswordField {
+#nameField, #emailField, #passwordField, #emailFieldLogin, #passwordFieldLogin{
     -fx-background-color: white; /* Установка белого фона */
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
     -fx-border-radius: 5px; /* Закругление углов */
 }
 
 /* Стили для кнопок */
-Button {
+#RegistrBtn, #showLoginFormButton, #loginBtn, #showRegisterFormButton {
     -fx-background-color: #4CAF50; /* Установка цвета кнопок */
     -fx-text-fill: white; /* Цвет текста на кнопке */
     -fx-border-radius: 5px; /* Закругление углов */
