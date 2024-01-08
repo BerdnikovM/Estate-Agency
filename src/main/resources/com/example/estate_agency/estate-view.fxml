@@ -37,10 +37,11 @@
             <TextField fx:id="emailFieldLogin" promptText="Почта" styleClass="signinTextField" />
 
             <PasswordField fx:id="passwordFieldLogin" promptText="Пароль" styleClass="signinTextField" />
-
-            <Button styleClass="signinBtn" text="Войти" />
+            <CheckBox fx:id="employeeCheckBox" text="Я сотрудник" styleClass="signinCheckBox" />
+            <Button onAction="#loginAction" styleClass="signinBtn" text="Войти" />
             <Button onAction="#showRegisterForm" styleClass="signinBtn" text="У меня нету аккаунта" />
         </VBox>
+        <Label fx:id="errorLabel" alignment="CENTER" layoutX="117.0" layoutY="325.0" prefHeight="49.0" prefWidth="385.0" styleClass="sign-inLabel" textFill="red" visible="false" />
 
     </children>
 </AnchorPane>

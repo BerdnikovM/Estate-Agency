@@ -23,3 +23,10 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); /* Тень */
 }
 
+.sign-inLabel {
+     -fx-background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+     -fx-background-radius: 5px; /* Закругление углов */
+     -fx-padding: 5px; /* Отступ внутри лейбла */
+     -fx-font-size: 14px; /* Размер текста */
+     -fx-text-fill: white; /* Цвет текста */
+ }
