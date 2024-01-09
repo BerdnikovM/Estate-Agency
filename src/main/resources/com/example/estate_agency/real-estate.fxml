@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.ButtonBar?>
+
+<BorderPane prefHeight="500.0" prefWidth="800.0" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.estate_agency.EstateController">
+
+    <top>
+        <!-- Панель меню -->
+        <MenuBar fx:id="menuBar">
+            <menus>
+                <Menu text="Меню">
+                    <items>
+                        <MenuItem text="Недвижимость"/>
+                        <MenuItem text="Договоры" fx:id="contractsMenuItem" visible="false"/>
+                        <MenuItem text="Отчеты" fx:id="reportsMenuItem" visible="false"/>
+                        <MenuItem text="Профиль"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+
+    <center>
+        <!-- Контейнер для содержимого -->
+        <VBox fx:id="contentContainer" style="-fx-background-color: lightgray;">
+            <!-- Содержимое контейнера -->
+            <!-- Здесь будет отображаться содержимое в зависимости от выбранного пункта меню -->
+        </VBox>
+    </center>
+
+</BorderPane>

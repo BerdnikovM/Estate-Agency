@@ -1,11 +1,17 @@
 package com.example.estate_agency;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.MenuItem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -40,6 +46,12 @@ public class EstateController {
 
     @FXML
     private CheckBox employeeCheckBox;
+
+    @FXML
+    private MenuItem contractsMenuItem;
+
+    @FXML
+    private MenuItem reportsMenuItem;
 
 
     @FXML
@@ -79,7 +91,8 @@ public class EstateController {
             // Выполнение запроса
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("Пользователь зарегистрирован успешно!");
+                clearErrorLabel();
+                showErrorLabel("Пользователь зарегистрирован успешно!");
             }
 
             statement.close();
@@ -98,7 +111,18 @@ public class EstateController {
             boolean isValidEmployee = checkEmployeeCredentials(email, password);
             if (isValidEmployee) {
                 // Логика для входа сотрудника
-                System.out.println("Вход выполнен как сотрудник");
+                try {
+                    // Загрузка новой сцены для сотрудника
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("real-estate.fxml"));
+                    Parent root = loader.load();
+
+                    // Создание новой сцены и установка в Stage
+                    Scene newScene = new Scene(root);
+                    Stage currentStage = (Stage) emailFieldLogin.getScene().getWindow();
+                    currentStage.setScene(newScene);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 // Обработка неправильных учетных данных сотрудника
                 clearErrorLabel();
@@ -109,8 +133,18 @@ public class EstateController {
 
             // Если вход успешен, выполните переход на новую страницу
             if (loginSuccessful) {
-                // Ваш код для перехода на новую страницу
-                System.out.println("Вход выполнен успешно!");
+                try {
+                    // Загрузка новой сцены
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("real-estate.fxml"));
+                    Parent root = loader.load();
+
+                    // Создание новой сцены и установка в Stage
+                    Scene newScene = new Scene(root);
+                    Stage currentStage = (Stage) emailFieldLogin.getScene().getWindow();
+                    currentStage.setScene(newScene);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 // В случае неудачного входа выполните соответствующие действия (например, выведите сообщение об ошибке)
                 clearErrorLabel();
@@ -136,6 +170,7 @@ public class EstateController {
 
             // Если результат запроса содержит записи, возвращаем true (успешный вход)
             if (resultSet.next()) {
+                fillUserProfile(email);
                 statement.close();
                 connection.close();
                 return true;
@@ -162,7 +197,9 @@ public class EstateController {
             ResultSet resultSet = statement.executeQuery();
 
             boolean isValid = resultSet.next(); // Если есть хотя бы одна запись, считаем учетные данные правильными
-
+            if (isValid) {
+                fillEmployeeProfile(email);
+            }
             resultSet.close();
             statement.close();
             connection.close();
@@ -183,5 +220,63 @@ public class EstateController {
     private void clearErrorLabel() {
         errorLabel.setVisible(false);
         errorLabel.setText("");
+    }
+
+    private void fillUserProfile(String email) {
+        try {
+            ConnectionClass connectionClass = new ConnectionClass();
+            Connection connection = connectionClass.getConnection();
+
+            // SQL-запрос для получения данных пользователя по email
+            String sql = "SELECT * FROM client WHERE mail = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+
+            // Выполнение запроса
+            ResultSet resultSet = statement.executeQuery();
+
+            // Если результат запроса содержит записи, заполняем объект UserProfile
+            if (resultSet.next()) {
+                UserProfile userProfile = new UserProfile();
+                userProfile.setName(resultSet.getString("client_name"));
+                userProfile.setEmail(resultSet.getString("mail"));
+                userProfile.setPhoneNumber(resultSet.getString("phone"));
+                userProfile.setAddress(resultSet.getString("client_address"));
+            }
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fillEmployeeProfile(String email) {
+        try {
+            ConnectionClass connectionClass = new ConnectionClass();
+            Connection connection = connectionClass.getConnection();
+
+            // SQL-запрос для получения данных сотрудника по email из таблицы employee
+            String sql = "SELECT * FROM employee WHERE mail = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+
+            // Выполнение запроса
+            ResultSet resultSet = statement.executeQuery();
+
+            // Если результат запроса содержит записи, заполняем объект UserProfile
+            if (resultSet.next()) {
+                UserProfile userProfile = new UserProfile();
+                userProfile.setName(resultSet.getString("full_name"));
+                userProfile.setEmail(resultSet.getString("mail"));
+                userProfile.setPhoneNumber(resultSet.getString("phone"));
+                userProfile.setAddress(resultSet.getString("address"));
+            }
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
