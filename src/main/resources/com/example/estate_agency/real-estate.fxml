@@ -16,9 +16,8 @@
                 <Menu text="Меню">
                     <items>
                         <MenuItem text="Недвижимость"/>
-                        <MenuItem text="Договоры" fx:id="contractsMenuItem" visible="false"/>
-                        <MenuItem text="Отчеты" fx:id="reportsMenuItem" visible="false"/>
-                        <MenuItem text="Профиль"/>
+                        <MenuItem text="Профиль" onAction="#showProfile"/>
+                        <MenuItem text="Отчеты"/>
                     </items>
                 </Menu>
             </menus>
@@ -28,9 +27,42 @@
     <center>
         <!-- Контейнер для содержимого -->
         <VBox fx:id="contentContainer" style="-fx-background-color: lightgray;">
-            <!-- Содержимое контейнера -->
-            <!-- Здесь будет отображаться содержимое в зависимости от выбранного пункта меню -->
+
+            <!-- Панель профиля -->
+            <VBox fx:id="profilePanel" spacing="10" alignment="CENTER" visible="false" style="-fx-padding: 40 0 0 0;">
+
+                <!-- Внутренний VBox для размещения элементов по середине -->
+                <VBox alignment="CENTER" spacing="10">
+                    <!-- Поля для отображения профиля -->
+                    <GridPane alignment="CENTER" hgap="5" vgap="10">
+
+                        <!-- Имя -->
+                        <Label text="Имя:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="profile_nameField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <!-- Почта -->
+                        <Label text="Почта:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="profile_emailField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <!-- Телефон -->
+                        <Label text="Телефон:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="profile_phoneField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <!-- Адрес -->
+                        <Label text="Адрес:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextField fx:id="profile_addressField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </GridPane>
+
+                    <!-- Кнопка сохранить -->
+                    <Button text="Сохранить" onAction="#saveProfile"/>
+                </VBox>
+
+            </VBox>
+
+            <!-- ... (другие элементы содержимого) ... -->
+
         </VBox>
+
     </center>
 
 </BorderPane>

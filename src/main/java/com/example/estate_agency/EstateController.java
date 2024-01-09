@@ -11,7 +11,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.MenuItem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -48,10 +47,19 @@ public class EstateController {
     private CheckBox employeeCheckBox;
 
     @FXML
-    private MenuItem contractsMenuItem;
+    private VBox profilePanel;
 
     @FXML
-    private MenuItem reportsMenuItem;
+    private TextField profile_nameField;
+
+    @FXML
+    private TextField profile_emailField;
+
+    @FXML
+    private TextField profile_phoneField;
+
+    @FXML
+    private TextField profile_addressField;
 
 
     @FXML
@@ -242,6 +250,8 @@ public class EstateController {
                 userProfile.setEmail(resultSet.getString("mail"));
                 userProfile.setPhoneNumber(resultSet.getString("phone"));
                 userProfile.setAddress(resultSet.getString("client_address"));
+                userProfile.setEmployee(false);
+                UserProfile.setCurrentUserProfile(userProfile);
             }
 
             statement.close();
@@ -271,6 +281,8 @@ public class EstateController {
                 userProfile.setEmail(resultSet.getString("mail"));
                 userProfile.setPhoneNumber(resultSet.getString("phone"));
                 userProfile.setAddress(resultSet.getString("address"));
+                userProfile.setEmployee(true);
+                UserProfile.setCurrentUserProfile(userProfile);
             }
 
             statement.close();
@@ -278,5 +290,29 @@ public class EstateController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showProfile() {
+        UserProfile userProfile = UserProfile.getCurrentUserProfile();
+
+        if (userProfile != null) {
+            profile_nameField.setText(userProfile.getName());
+            profile_emailField.setText(userProfile.getEmail());
+            profile_phoneField.setText(userProfile.getPhoneNumber());
+            profile_addressField.setText(userProfile.getAddress());
+        }
+
+        // Показать панель профиля
+        profilePanel.setVisible(true);
+    }
+
+
+    public void saveProfile() {
+        // Здесь добавьте логику сохранения данных профиля в базу данных
+        // Получите значения из полей profile_phoneField и profile_addressField и сохраните их в базу данных
+        String phone = profile_phoneField.getText();
+        String address = profile_addressField.getText();
+
+        // Ваша логика для сохранения этих данных в базу данных
     }
 }
