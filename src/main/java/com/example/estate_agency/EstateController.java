@@ -3,14 +3,12 @@ package com.example.estate_agency;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.CheckBox;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -61,11 +59,30 @@ public class EstateController {
     @FXML
     private TextField profile_addressField;
 
+    @FXML
+    private Label saveStatusLabel;
+
+    @FXML
+    private VBox estatePanel; // Получаем доступ к VBox панели недвижимости
+
+    @FXML
+    private Button addButton; // Кнопка "Добавить"
+
+    @FXML
+    private VBox addEstatePanel;
+
+    @FXML
+    private MenuItem reportsBtn;
+
+    @FXML
+    private MenuItem contractsBtn;
 
     @FXML
     private void showLoginForm() {
         registrContainer.setVisible(false);
         loginContainer.setVisible(true);
+        emailFieldLogin.setText("krutikov17@yandex.ru");
+        passwordFieldLogin.setText("krutikov");
     }
 
     @FXML
@@ -306,13 +323,96 @@ public class EstateController {
         profilePanel.setVisible(true);
     }
 
-
     public void saveProfile() {
-        // Здесь добавьте логику сохранения данных профиля в базу данных
-        // Получите значения из полей profile_phoneField и profile_addressField и сохраните их в базу данных
         String phone = profile_phoneField.getText();
         String address = profile_addressField.getText();
 
-        // Ваша логика для сохранения этих данных в базу данных
+        UserProfile userProfile = UserProfile.getCurrentUserProfile();
+
+        if (userProfile != null) {
+            if (!userProfile.isEmployee()) {
+                saveClientProfile(userProfile.getEmail(), phone, address);
+            } else {
+                saveEmployeeProfile(userProfile.getEmail(), phone, address);
+            }
+        } else {
+            // Обработка случая, если userProfile равен null
+        }
+        saveStatusLabel.setText("Данные сохранены успешно");
+    }
+
+    private void saveClientProfile(String email, String phone, String address) {
+        try {
+            ConnectionClass connectionClass = new ConnectionClass();
+            Connection connection = connectionClass.getConnection();
+
+            String sql = "UPDATE client SET client_address = ?, phone = ? WHERE mail = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, address);
+            statement.setString(2, phone);
+            statement.setString(3, email);
+
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveEmployeeProfile(String email, String phone, String address) {
+        try {
+            ConnectionClass connectionClass = new ConnectionClass();
+            Connection connection = connectionClass.getConnection();
+
+            String sql = "UPDATE employee SET address = ?, phone = ? WHERE mail = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, address);
+            statement.setString(2, phone);
+            statement.setString(3, email);
+
+            statement.executeUpdate();
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void initialize() {
+        // Получаем значение isEmployee из UserProfile
+        UserProfile userProfile = UserProfile.getCurrentUserProfile();
+        if (userProfile != null) {
+            if (userProfile.isEmployee()) {
+                addButton.setVisible(true); // Показываем кнопку "Добавить"
+                contractsBtn.setVisible(true);
+                reportsBtn.setVisible(true);
+            } else {
+                addButton.setVisible(false); // Скрываем кнопку "Добавить"
+                contractsBtn.setVisible(false);
+                reportsBtn.setVisible(false);
+            }
+        }
+    }
+
+    // Метод обработки нажатия на кнопку "Добавить"
+    @FXML
+    private void addEstate() {
+        estatePanel.setManaged(false);
+        addEstatePanel.setManaged(true);
+        estatePanel.setVisible(false);
+        addEstatePanel.setVisible(true);
+    }
+    @FXML
+    private void createEstate() {
+        // Логика для создания нового объекта недвижимости
+        // Получите данные из полей и добавьте новый объект недвижимости в базу данных или другое хранилище
+
+        // После добавления объекта недвижимости
+        estatePanel.setManaged(true);
+        addEstatePanel.setManaged(false);
+        addEstatePanel.setVisible(false);
+        estatePanel.setVisible(true);
     }
 }

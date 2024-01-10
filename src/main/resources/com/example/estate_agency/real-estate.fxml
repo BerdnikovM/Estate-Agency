@@ -17,7 +17,8 @@
                     <items>
                         <MenuItem text="Недвижимость"/>
                         <MenuItem text="Профиль" onAction="#showProfile"/>
-                        <MenuItem text="Отчеты"/>
+                        <MenuItem fx:id="reportsBtn" text="Отчеты"/>
+                        <MenuItem fx:id="contractsBtn" text="Договоры"/>
                     </items>
                 </Menu>
             </menus>
@@ -27,9 +28,61 @@
     <center>
         <!-- Контейнер для содержимого -->
         <VBox fx:id="contentContainer" style="-fx-background-color: lightgray;">
+            <!-- Панель недвижимости -->
+            <VBox fx:id="estatePanel" spacing="10" alignment="CENTER" style="-fx-padding: 0 0 0 0;">
+                <HBox alignment="CENTER" spacing="10">
+                    <!-- Кнопка добавить -->
+                    <Button fx:id="addButton" text="Добавить" onAction="#addEstate"/>
+                </HBox>
+                <!-- Дополнительные элементы для отображения информации об объектах недвижимости -->
+            </VBox>
+
+            <VBox fx:id="addEstatePanel" spacing="10" alignment="CENTER" managed="false" visible="false">
+                <VBox alignment="CENTER" spacing="10">
+                    <!-- Поля для ввода данных -->
+                    <GridPane alignment="CENTER" hgap="5" vgap="10">
+                        <Label text="Название объекта:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="estateNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Площадь объекта:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="floorSpaceField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Площадь балконов:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="balconiesSpaceField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Количество балконов:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextField fx:id="numberBalconiesField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <Label text="Колличество спален:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <TextField fx:id="numberBedroomsField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                        <Label text="Количество гаражей:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <TextField fx:id="numberGaragesField" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                        <Label text="Колличество парковок:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                        <TextField fx:id="numberParkingSpacesField" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                        <Label text="Улица:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                        <TextField fx:id="streetField" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+                        <Label text="Цена:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                        <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
+                        <Label text="Описание:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                        <TextField fx:id="descriptField" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+                        <!-- Кнопка для выбора изображения -->
+                        <Button text="Выбрать изображение" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+                        <Label fx:id="imageLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+
+                        <!-- Кнопка "Создать" -->
+                        <Button text="Создать" onAction="#createEstate" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+                    </GridPane>
+                </VBox>
+            </VBox>
 
             <!-- Панель профиля -->
-            <VBox fx:id="profilePanel" spacing="10" alignment="CENTER" visible="false" style="-fx-padding: 40 0 0 0;">
+            <VBox fx:id="profilePanel" spacing="10" alignment="CENTER" managed="false" visible="false" style="-fx-padding: 40 0 0 0;">
 
                 <!-- Внутренний VBox для размещения элементов по середине -->
                 <VBox alignment="CENTER" spacing="10">
@@ -55,6 +108,7 @@
 
                     <!-- Кнопка сохранить -->
                     <Button text="Сохранить" onAction="#saveProfile"/>
+                    <Label fx:id="saveStatusLabel" text="" style="-fx-text-fill: green;"/>
                 </VBox>
 
             </VBox>
