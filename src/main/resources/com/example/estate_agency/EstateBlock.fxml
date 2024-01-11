@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.estate_agency.EstateBlockController">
+    <!-- Изображение -->
+    <ImageView fx:id="estateImageView" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+
+    <!-- Вертикальный контейнер для текста и кнопки -->
+    <VBox spacing="5">
+        <!-- Название объекта -->
+        <Label fx:id="nameLabel" text="Название объекта"/>
+
+        <!-- Цена -->
+        <Label fx:id="priceLabel" text="Цена: $0.0"/>
+
+        <!-- Кнопка "Связаться с агентом" -->
+        <Button text="Связаться с агентом"/>
+    </VBox>
+</HBox>

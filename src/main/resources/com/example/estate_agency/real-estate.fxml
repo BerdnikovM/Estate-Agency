@@ -15,7 +15,7 @@
             <menus>
                 <Menu text="Меню">
                     <items>
-                        <MenuItem text="Недвижимость"/>
+                        <MenuItem text="Недвижимость" onAction="#showEstate"/>
                         <MenuItem text="Профиль" onAction="#showProfile"/>
                         <MenuItem fx:id="reportsBtn" text="Отчеты"/>
                         <MenuItem fx:id="contractsBtn" text="Договоры"/>
@@ -34,7 +34,7 @@
                     <!-- Кнопка добавить -->
                     <Button fx:id="addButton" text="Добавить" onAction="#addEstate"/>
                 </HBox>
-                <!-- Дополнительные элементы для отображения информации об объектах недвижимости -->
+
             </VBox>
 
             <VBox fx:id="addEstatePanel" spacing="10" alignment="CENTER" managed="false" visible="false">
@@ -71,9 +71,8 @@
                         <Label text="Описание:" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
                         <TextField fx:id="descriptField" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
 
-                        <!-- Кнопка для выбора изображения -->
-                        <Button text="Выбрать изображение" GridPane.columnIndex="0" GridPane.rowIndex="10" />
-                        <Label fx:id="imageLabel" text="" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+                        <Label text="Путь к изображению" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+                        <TextField fx:id="imgPathField" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
                         <!-- Кнопка "Создать" -->
                         <Button text="Создать" onAction="#createEstate" GridPane.columnIndex="1" GridPane.rowIndex="11"/>

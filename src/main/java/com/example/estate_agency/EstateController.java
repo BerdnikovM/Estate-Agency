@@ -5,14 +5,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.layout.HBox;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 public class EstateController {
@@ -76,6 +77,40 @@ public class EstateController {
 
     @FXML
     private MenuItem contractsBtn;
+
+    @FXML
+    private TextField estateNameField;
+
+    @FXML
+    private TextField floorSpaceField;
+
+    @FXML
+    private TextField balconiesSpaceField;
+
+    @FXML
+    private TextField numberBalconiesField;
+
+    @FXML
+    private TextField numberBedroomsField;
+
+    @FXML
+    private TextField numberGaragesField;
+
+    @FXML
+    private TextField numberParkingSpacesField;
+
+    @FXML
+    private TextField streetField;
+
+    @FXML
+    private TextField priceField;
+
+    @FXML
+    private TextField descriptField;
+
+    @FXML
+    private TextField imgPathField;
+
 
     @FXML
     private void showLoginForm() {
@@ -320,6 +355,11 @@ public class EstateController {
         }
 
         // Показать панель профиля
+        estatePanel.setManaged(false);
+        estatePanel.setVisible(false);
+        addEstatePanel.setManaged(false);
+        addEstatePanel.setVisible(false);
+        profilePanel.setManaged(true);
         profilePanel.setVisible(true);
     }
 
@@ -388,12 +428,25 @@ public class EstateController {
                 addButton.setVisible(true); // Показываем кнопку "Добавить"
                 contractsBtn.setVisible(true);
                 reportsBtn.setVisible(true);
+                loadEstateData();
             } else {
                 addButton.setVisible(false); // Скрываем кнопку "Добавить"
                 contractsBtn.setVisible(false);
                 reportsBtn.setVisible(false);
+                loadEstateData();
             }
         }
+    }
+
+
+
+    public void showEstate() {
+        profilePanel.setManaged(false);
+        profilePanel.setVisible(false);
+        addEstatePanel.setManaged(false);
+        addEstatePanel.setVisible(false);
+        estatePanel.setManaged(true);
+        estatePanel.setVisible(true);
     }
 
     // Метод обработки нажатия на кнопку "Добавить"
@@ -406,13 +459,105 @@ public class EstateController {
     }
     @FXML
     private void createEstate() {
-        // Логика для создания нового объекта недвижимости
-        // Получите данные из полей и добавьте новый объект недвижимости в базу данных или другое хранилище
+        String estateName = estateNameField.getText();
+        double floorSpace = Double.parseDouble(floorSpaceField.getText());
+        double balconiesSpace = Double.parseDouble(balconiesSpaceField.getText());
+        int numberOfBalconies = Integer.parseInt(numberBalconiesField.getText());
+        int numberOfBedrooms = Integer.parseInt(numberBedroomsField.getText());
+        int numberOfGarages = Integer.parseInt(numberGaragesField.getText());
+        int numberOfParkingSpaces = Integer.parseInt(numberParkingSpacesField.getText());
+        String street = streetField.getText();
+        double price = Double.parseDouble(priceField.getText());
+        String estateDescription = descriptField.getText();
+        String imagePath = imgPathField.getText();
+
+        try {
+            Connection connection = ConnectionClass.getConnection();
+            if (connection != null) {
+                String insertQuery = "INSERT INTO estate (estate_name, floor_space, balconies_space, number_of_balconies, number_of_bedrooms, number_of_garages, number_of_parking_spaces, estate_description, street, price, img_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                // Создаем PreparedStatement для выполнения запроса с параметрами
+                PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+                preparedStatement.setString(1, estateName);
+                preparedStatement.setDouble(2, floorSpace);
+                preparedStatement.setDouble(3, balconiesSpace);
+                preparedStatement.setInt(4, numberOfBalconies);
+                preparedStatement.setInt(5, numberOfBedrooms);
+                preparedStatement.setInt(6, numberOfGarages);
+                preparedStatement.setInt(7, numberOfParkingSpaces);
+                preparedStatement.setString(8, estateDescription);
+                preparedStatement.setString(9, street);
+                preparedStatement.setDouble(10, price);
+                preparedStatement.setString(11, imagePath);
+
+                int rowsInserted = preparedStatement.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("Новая недвижимость добавлена успешно!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         // После добавления объекта недвижимости
         estatePanel.setManaged(true);
         addEstatePanel.setManaged(false);
         addEstatePanel.setVisible(false);
         estatePanel.setVisible(true);
+    }
+
+    public void loadEstateData() {
+//        estatePanel.getChildren().clear(); // Очистим контейнер перед загрузкой новых данных
+
+        try (Connection connection = ConnectionClass.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            String selectQuery = "SELECT * FROM estate";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+
+            int estatesCount = 0;
+
+            while (resultSet.next() && estatesCount < 3) {
+                Estate estate = createEstateFromResultSet(resultSet);
+                addEstateBlock(estate);
+                estatesCount++;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Estate createEstateFromResultSet(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        String estateName = resultSet.getString("estate_name");
+        double floorSpace = resultSet.getDouble("floor_space");
+        double balconiesSpace = resultSet.getDouble("balconies_space");
+        int numberOfBalconies = resultSet.getInt("number_of_balconies");
+        int numberOfBedrooms = resultSet.getInt("number_of_bedrooms");
+        int numberOfGarages = resultSet.getInt("number_of_garages");
+        int numberOfParkingSpaces = resultSet.getInt("number_of_parking_spaces");
+        String street = resultSet.getString("street");
+        double price = resultSet.getDouble("price");
+        String estateDescription = resultSet.getString("estate_description");
+        String imgPath = resultSet.getString("img_path");
+
+        return new Estate(id, estateName, floorSpace, balconiesSpace, numberOfBalconies,
+                numberOfBedrooms, numberOfGarages, numberOfParkingSpaces,
+                street, price, estateDescription, imgPath);
+    }
+
+    private void addEstateBlock(Estate estate) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EstateBlock.fxml"));
+            HBox estateBlockNode = loader.load();
+
+            EstateBlockController estateBlockController = loader.getController();
+            estateBlockController.setEstateData(estate);
+
+            estatePanel.getChildren().add(estateBlockNode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
