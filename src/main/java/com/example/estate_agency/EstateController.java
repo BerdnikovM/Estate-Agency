@@ -6,6 +6,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -111,6 +114,17 @@ public class EstateController {
     @FXML
     private TextField imgPathField;
 
+    @FXML
+    private ScrollPane scrollEstate;
+
+    @FXML
+    private VBox InspectionPanel;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private ComboBox<String> estateComboBox;
 
     @FXML
     private void showLoginForm() {
@@ -359,6 +373,10 @@ public class EstateController {
         estatePanel.setVisible(false);
         addEstatePanel.setManaged(false);
         addEstatePanel.setVisible(false);
+        scrollEstate.setManaged(false);
+        scrollEstate.setVisible(false);
+        InspectionPanel.setVisible(false);
+        InspectionPanel.setManaged(false);
         profilePanel.setManaged(true);
         profilePanel.setVisible(true);
     }
@@ -429,11 +447,13 @@ public class EstateController {
                 contractsBtn.setVisible(true);
                 reportsBtn.setVisible(true);
                 loadEstateData();
+                loadEstateNames();
             } else {
                 addButton.setVisible(false); // Скрываем кнопку "Добавить"
                 contractsBtn.setVisible(false);
                 reportsBtn.setVisible(false);
                 loadEstateData();
+                loadEstateNames();
             }
         }
     }
@@ -445,6 +465,10 @@ public class EstateController {
         profilePanel.setVisible(false);
         addEstatePanel.setManaged(false);
         addEstatePanel.setVisible(false);
+        InspectionPanel.setVisible(false);
+        InspectionPanel.setManaged(false);
+        scrollEstate.setManaged(true);
+        scrollEstate.setVisible(true);
         estatePanel.setManaged(true);
         estatePanel.setVisible(true);
     }
@@ -452,6 +476,8 @@ public class EstateController {
     // Метод обработки нажатия на кнопку "Добавить"
     @FXML
     private void addEstate() {
+        scrollEstate.setManaged(false);
+        scrollEstate.setVisible(false);
         estatePanel.setManaged(false);
         addEstatePanel.setManaged(true);
         estatePanel.setVisible(false);
@@ -504,6 +530,8 @@ public class EstateController {
         addEstatePanel.setManaged(false);
         addEstatePanel.setVisible(false);
         estatePanel.setVisible(true);
+        scrollEstate.setManaged(true);
+        scrollEstate.setVisible(true);
     }
 
     public void loadEstateData() {
@@ -515,12 +543,10 @@ public class EstateController {
             String selectQuery = "SELECT * FROM estate";
             ResultSet resultSet = statement.executeQuery(selectQuery);
 
-            int estatesCount = 0;
 
-            while (resultSet.next() && estatesCount < 3) {
+            while (resultSet.next()) {
                 Estate estate = createEstateFromResultSet(resultSet);
                 addEstateBlock(estate);
-                estatesCount++;
             }
 
         } catch (SQLException e) {
@@ -557,6 +583,64 @@ public class EstateController {
 
             estatePanel.getChildren().add(estateBlockNode);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openInspectionPanel() {
+        scrollEstate.setManaged(false);
+        scrollEstate.setVisible(false);
+        estatePanel.setVisible(false);
+        estatePanel.setManaged(false);
+        addEstatePanel.setManaged(false);
+        addEstatePanel.setVisible(false);
+        profilePanel.setVisible(false);
+        profilePanel.setManaged(false);
+        InspectionPanel.setVisible(true);
+        InspectionPanel.setManaged(true);
+    }
+
+    @FXML
+    private void sendRequest() {
+        String inspectionDate = datePicker.getValue().toString();
+        String estateName = estateComboBox.getValue();
+        String clientName = UserProfile.getCurrentUserProfile().getName();
+
+        // Выполните подключение к базе данных и вставку данных в таблицу estate_inspection
+        try (Connection connection = ConnectionClass.getConnection()) {
+            String insertQuery = "INSERT INTO estate_inspection (inspection_date, estate_name, client_name) VALUES (?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, inspectionDate);
+                preparedStatement.setString(2, estateName);
+                preparedStatement.setString(3, clientName);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    System.out.println("Запрос успешно отправлен.");
+                } else {
+                    System.out.println("Не удалось отправить запрос.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadEstateNames() {
+        try (Connection connection = ConnectionClass.getConnection();
+             Statement statement = connection.createStatement()) {
+
+            String selectQuery = "SELECT estate_name FROM estate";
+            ResultSet resultSet = statement.executeQuery(selectQuery);
+
+            while (resultSet.next()) {
+                String estateName = resultSet.getString("estate_name");
+                estateComboBox.getItems().add(estateName);
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
